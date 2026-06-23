@@ -5,7 +5,6 @@ import com.example.attendance.common.config.SecurityConfig;
 import com.example.attendance.employee.dto.EmployeeResponse;
 import com.example.attendance.employee.entity.Role;
 import com.example.attendance.employee.service.EmployeeService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,9 +61,6 @@ class EmployeeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @MockitoBean
     private EmployeeService employeeService;

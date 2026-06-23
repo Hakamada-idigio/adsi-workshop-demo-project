@@ -135,6 +135,7 @@ public class SecurityConfig {
     private JsonAuthenticationFilter jsonAuthenticationFilter(
             AuthenticationManager authenticationManager) {
         JsonAuthenticationFilter filter = new JsonAuthenticationFilter(objectMapper);
+        filter.setFilterProcessesUrl("/api/auth/login");
         filter.setAuthenticationManager(authenticationManager);
         filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
         filter.setAuthenticationSuccessHandler(

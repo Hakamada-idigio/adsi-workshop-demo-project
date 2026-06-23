@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public class EmployeeUserDetails extends User {
 
+    private static final long serialVersionUID = 1L;
+
     public record EmployeeInfo(
             UUID employeeId,
             String employeeName,

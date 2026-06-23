@@ -25,7 +25,6 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -35,8 +34,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 public class AttendanceServiceImpl implements AttendanceService {
-
-    private static final ZoneId ZONE_TOKYO = ZoneId.of("Asia/Tokyo");
 
     private final AttendanceRecordRepository attendanceRepository;
     private final EmployeeRepository employeeRepository;

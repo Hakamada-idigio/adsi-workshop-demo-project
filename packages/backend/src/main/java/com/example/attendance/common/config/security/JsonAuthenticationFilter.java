@@ -18,7 +18,6 @@ public class JsonAuthenticationFilter extends UsernamePasswordAuthenticationFilt
 
     public JsonAuthenticationFilter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
-        setFilterProcessesUrl("/api/auth/login");
     }
 
     @Override
