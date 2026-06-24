@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, Clock, History, LayoutDashboard, Users } from "lucide-react";
+import { BarChart3, Building2, CheckSquare, Clock, FileEdit, History, LayoutDashboard, Users } from "lucide-react";
 import Link from "next/link";
 import {
   Sidebar,
@@ -22,11 +22,17 @@ export function AppSidebar() {
     { title: "ダッシュボード", href: "/dashboard", icon: LayoutDashboard },
     { title: "打刻", href: "/attendance", icon: Clock },
     { title: "勤怠履歴", href: "/history", icon: History },
+    { title: "修正申請", href: "/corrections", icon: FileEdit },
+  ];
+
+  const managerItems = [
+    { title: "承認", href: "/approvals", icon: CheckSquare },
   ];
 
   const adminItems = [
     { title: "社員管理", href: "/admin/employees", icon: Users },
     { title: "部署管理", href: "/admin/departments", icon: Building2 },
+    { title: "月次集計", href: "/admin/reports", icon: BarChart3 },
   ];
 
   return (
@@ -50,6 +56,24 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {user?.isManager && (
+          <SidebarGroup>
+            <SidebarGroupLabel>上長メニュー</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {managerItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton render={<Link href={item.href} />}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {user?.role === "ADMIN" && (
           <SidebarGroup>

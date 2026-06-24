@@ -42,6 +42,11 @@ dependencies {
 	// UUID
 	implementation("com.github.f4b6a3:uuid-creator:6.0.0")
 
+	// PDF (JasperReports)
+	implementation("net.sf.jasperreports:jasperreports:7.0.1")
+	implementation("net.sf.jasperreports:jasperreports-pdf:7.0.1")
+	implementation("net.sf.jasperreports:jasperreports-jdt:7.0.1")
+
 	// API Documentation
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 

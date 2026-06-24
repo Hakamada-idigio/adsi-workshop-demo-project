@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="monthly-report" language="java"
+              pageWidth="842" pageHeight="595" orientation="Landscape"
+              columnWidth="802" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20">
+
+    <parameter name="month" class="java.lang.String"/>
+
+    <field name="employeeName" class="java.lang.String"/>
+    <field name="departmentName" class="java.lang.String"/>
+    <field name="workDays" class="java.lang.Integer"/>
+    <field name="totalWorkMinutes" class="java.lang.Integer"/>
+    <field name="totalOvertimeMinutes" class="java.lang.Integer"/>
+    <field name="absentDays" class="java.lang.Integer"/>
+
+    <title height="50">
+        <element kind="textField" x="0" y="0" width="802" height="40"
+                 fontSize="18.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+            <expression><![CDATA["Monthly Attendance Report - " + $P{month}]]></expression>
+        </element>
+    </title>
+
+    <columnHeader height="30">
+        <element kind="staticText" x="0" y="0" width="134" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Employee]]></text>
+        </element>
+        <element kind="staticText" x="134" y="0" width="134" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Department]]></text>
+        </element>
+        <element kind="staticText" x="268" y="0" width="134" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Work Days]]></text>
+        </element>
+        <element kind="staticText" x="402" y="0" width="134" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Work Minutes]]></text>
+        </element>
+        <element kind="staticText" x="536" y="0" width="134" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[OT Minutes]]></text>
+        </element>
+        <element kind="staticText" x="670" y="0" width="132" height="30"
+                 mode="Opaque" backcolor="#DDDDDD" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[Absent Days]]></text>
+        </element>
+    </columnHeader>
+
+    <detail>
+        <band height="25">
+            <element kind="textField" x="0" y="0" width="134" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{employeeName}]]></expression>
+            </element>
+            <element kind="textField" x="134" y="0" width="134" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{departmentName}]]></expression>
+            </element>
+            <element kind="textField" x="268" y="0" width="134" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{workDays}]]></expression>
+            </element>
+            <element kind="textField" x="402" y="0" width="134" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{totalWorkMinutes}]]></expression>
+            </element>
+            <element kind="textField" x="536" y="0" width="134" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{totalOvertimeMinutes}]]></expression>
+            </element>
+            <element kind="textField" x="670" y="0" width="132" height="25"
+                     hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{absentDays}]]></expression>
+            </element>
+        </band>
+    </detail>
+
+    <pageFooter height="20">
+        <element kind="textField" x="680" y="0" width="122" height="20"
+                 fontSize="8.0" hTextAlign="Right" vTextAlign="Middle">
+            <expression><![CDATA["Page " + $V{PAGE_NUMBER}]]></expression>
+        </element>
+    </pageFooter>
+
+</jasperReport>
