@@ -24,10 +24,17 @@
 
 SageMaker の Code Editor（code-server, base-path `/codeeditor/default`）上でプレビューする場合:
 
-- backend: `npm run boot:workshop`（H2 インメモリ、Docker 不要）
-- frontend: `npm run dev:sagemaker`
-  - `SAGEMAKER=1 NEXT_PUBLIC_BASE_PATH=/codeeditor/default/absports/3000` で `next build` →
-    `next start -p 3001` ＋ `scripts/sagemaker-proxy.mjs`（3000→3001 のプレフィックス復元プロキシ）
+- **起動（ビルド＋全サービス開始）**: `npm run dev:sagemaker`
+- **停止**: `npm run dev:sagemaker:stop`
+- **リビルド＋再起動**: `npm run dev:sagemaker` を再度実行（既存プロセスを自動停止してから起動する）
+
+`scripts/dev-sagemaker.sh` が以下を一括で行う:
+1. 既存プロセスの停止（ポート 3000/3001/8080）
+2. Frontend ビルド（`next build`）
+3. Backend 起動（workshop プロファイル、H2 インメモリ、:8080）
+4. Frontend 起動（`next start`、:3001）
+5. SageMaker プロキシ起動（:3000 → :3001）
+
 - アクセス先: ブラウザで **`https://<studio-domain>/codeeditor/default/absports/3000/` を直接開く**
   - `<studio-domain>` は環境ごとに異なる（例: `<studio-domain>.studio.ap-northeast-1.sagemaker.aws`）
   - **PORTS タブの地球儀ボタンは使わない**。`ports` 形式は外側ゲートウェイの使い捨てトークン

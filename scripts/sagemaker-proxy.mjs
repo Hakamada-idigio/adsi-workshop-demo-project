@@ -3,7 +3,7 @@ import net from "node:net";
 
 const TARGET_PORT = 3001;
 const LISTEN_PORT = 3000;
-const BASE_PATH = "/ports/3000";
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "/codeeditor/default/absports/3000";
 
 function addBasePath(url) {
   return url.startsWith(BASE_PATH) ? url : BASE_PATH + url;
