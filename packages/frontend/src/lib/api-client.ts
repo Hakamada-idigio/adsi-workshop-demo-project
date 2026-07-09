@@ -50,7 +50,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-function mutationHeaders(): Record<string, string> {
+export function mutationHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     Accept: "application/json",

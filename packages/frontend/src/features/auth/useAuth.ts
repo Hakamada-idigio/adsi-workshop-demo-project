@@ -40,7 +40,7 @@ export function useLogout() {
 
   return useMutation({
     mutationFn: () => logout(),
-    onSuccess: () => {
+    onSettled: () => {
       queryClient.clear();
       router.push("/login");
     },

@@ -1,4 +1,4 @@
-import { apiClient } from "@/lib/api-client";
+import { apiClient, mutationHeaders, withBasePath } from "@/lib/api-client";
 
 export interface AuthUser {
   id: string;
@@ -19,8 +19,18 @@ export function login(request: LoginRequest): Promise<AuthUser> {
   return apiClient.post<AuthUser>("/api/auth/login", request);
 }
 
-export function logout(): Promise<void> {
-  return apiClient.post<void>("/api/auth/logout");
+export async function logout(): Promise<void> {
+  try {
+    await fetch(withBasePath("/api/auth/logout"), {
+      method: "POST",
+      credentials: "include",
+      headers: mutationHeaders(),
+      redirect: "manual",
+    });
+  } catch {
+    // SageMaker Gateway の OIDC リダイレクトで CORS エラーになり得るが、
+    // ログアウトの意図は達成されるため握りつぶす
+  }
 }
 
 export function fetchCurrentUser(): Promise<AuthUser> {
