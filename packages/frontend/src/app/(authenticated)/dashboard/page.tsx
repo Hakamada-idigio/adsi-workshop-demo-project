@@ -10,7 +10,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">ダッシュボード</h1>
+        <h1 className="font-bold" style={{ fontSize: "20px" }}>ダッシュボード</h1>
         {user && (
           <p className="text-muted-foreground mt-1">
             {user.departmentName} / <span className="font-medium text-foreground">{user.name}</span>

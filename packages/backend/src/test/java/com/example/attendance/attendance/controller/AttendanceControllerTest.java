@@ -34,6 +34,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 @WebMvcTest(
     controllers = AttendanceController.class,
     excludeFilters = @ComponentScan.Filter(
@@ -83,6 +86,19 @@ class AttendanceControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.workDate").value("2025-01-15"))
                 .andExpect(jsonPath("$.clockOut").doesNotExist());
+    }
+
+    @Test
+    @DisplayName("POST /api/attendance/clock-in 既に出勤中の場合は409を返す")
+    void clockIn_alreadyClockedIn_returns409() throws Exception {
+        // Arrange
+        when(attendanceService.clockIn(EMPLOYEE_ID))
+                .thenThrow(new ResponseStatusException(HttpStatus.CONFLICT, "Already clocked in"));
+
+        // Act & Assert
+        mockMvc.perform(post("/api/attendance/clock-in")
+                        .param("employeeId", EMPLOYEE_ID.toString()))
+                .andExpect(status().isConflict());
     }
 
     @Test
