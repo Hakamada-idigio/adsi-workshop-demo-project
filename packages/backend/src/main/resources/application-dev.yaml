@@ -8,6 +8,9 @@ spring:
     username: attendance
     password: attendance
 
+  flyway:
+    locations: classpath:db/migration,classpath:db/migration-postgresql,classpath:db/seed
+
   jpa:
     show-sql: true
     properties:

@@ -28,14 +28,18 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 @WebMvcTest(
     controllers = AttendanceController.class,
@@ -76,13 +80,16 @@ class AttendanceControllerTest {
                 LocalDate.of(2025, 1, 15),
                 Instant.parse("2025-01-15T00:00:00Z"),
                 null,
-                false
+                false,
+                null,
+                null
         );
-        when(attendanceService.clockIn(EMPLOYEE_ID)).thenReturn(response);
+        when(attendanceService.clockIn(eq(EMPLOYEE_ID), any())).thenReturn(response);
 
         // Act & Assert
         mockMvc.perform(post("/api/attendance/clock-in")
-                        .param("employeeId", EMPLOYEE_ID.toString()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"employeeId\":\"" + EMPLOYEE_ID + "\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.workDate").value("2025-01-15"))
                 .andExpect(jsonPath("$.clockOut").doesNotExist());
@@ -92,12 +99,13 @@ class AttendanceControllerTest {
     @DisplayName("POST /api/attendance/clock-in 既に出勤中の場合は409を返す")
     void clockIn_alreadyClockedIn_returns409() throws Exception {
         // Arrange
-        when(attendanceService.clockIn(EMPLOYEE_ID))
+        when(attendanceService.clockIn(eq(EMPLOYEE_ID), any()))
                 .thenThrow(new ResponseStatusException(HttpStatus.CONFLICT, "Already clocked in"));
 
         // Act & Assert
         mockMvc.perform(post("/api/attendance/clock-in")
-                        .param("employeeId", EMPLOYEE_ID.toString()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"employeeId\":\"" + EMPLOYEE_ID + "\"}"))
                 .andExpect(status().isConflict());
     }
 
@@ -110,13 +118,16 @@ class AttendanceControllerTest {
                 LocalDate.of(2025, 1, 15),
                 Instant.parse("2025-01-14T23:00:00Z"),
                 Instant.parse("2025-01-15T08:00:00Z"),
-                false
+                false,
+                null,
+                null
         );
-        when(attendanceService.clockOut(EMPLOYEE_ID)).thenReturn(response);
+        when(attendanceService.clockOut(eq(EMPLOYEE_ID), any())).thenReturn(response);
 
         // Act & Assert
         mockMvc.perform(post("/api/attendance/clock-out")
-                        .param("employeeId", EMPLOYEE_ID.toString()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"employeeId\":\"" + EMPLOYEE_ID + "\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.clockOut").exists());
     }

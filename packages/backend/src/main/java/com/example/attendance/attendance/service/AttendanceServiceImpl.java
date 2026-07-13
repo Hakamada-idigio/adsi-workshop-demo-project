@@ -48,10 +48,19 @@ public class AttendanceServiceImpl implements AttendanceService {
         this.clock = clock;
     }
 
+    private static final int MAX_MEMO_LENGTH = 100;
+
     @Override
     @Transactional
     public AttendanceRecordResponse clockIn(UUID employeeId) {
+        return clockIn(employeeId, null);
+    }
+
+    @Override
+    @Transactional
+    public AttendanceRecordResponse clockIn(UUID employeeId, String memo) {
         var employee = findEmployeeOrThrow(employeeId);
+        validateMemoLength(memo);
         var today = LocalDate.now(clock);
 
         attendanceRepository.findByEmployeeIdAndWorkDateAndClockOutIsNull(employeeId, today)
@@ -65,6 +74,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .employee(employee)
                 .workDate(today)
                 .clockIn(now)
+                .clockInMemo(memo)
                 .corrected(false)
                 .build();
 
@@ -76,14 +86,56 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     @Transactional
     public AttendanceRecordResponse clockOut(UUID employeeId) {
+        return clockOut(employeeId, null);
+    }
+
+    @Override
+    @Transactional
+    public AttendanceRecordResponse clockOut(UUID employeeId, String memo) {
         var today = LocalDate.now(clock);
         var record = attendanceRepository.findByEmployeeIdAndWorkDateAndClockOutIsNull(employeeId, today)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT, "No active clock-in found"));
 
+        validateMemoLength(memo);
         record.setClockOut(Instant.now(clock));
+        record.setClockOutMemo(memo);
         var saved = attendanceRepository.save(record);
         log.info("Clock-out recorded for employee={} at={}", employeeId, saved.getClockOut());
         return AttendanceRecordResponse.from(saved);
+    }
+
+    @Override
+    @Transactional
+    public AttendanceRecordResponse updateMemo(UUID recordId, UUID requesterId, String clockInMemo, String clockOutMemo) {
+        var record = attendanceRepository.findById(recordId)
+                .orElseThrow(() -> new EntityNotFoundException("Record not found"));
+
+        var requester = findEmployeeOrThrow(requesterId);
+        var isOwner = record.getEmployee().getId().equals(requesterId);
+        var isAdmin = requester.isManager() || requester.getRole() == com.example.attendance.employee.entity.Role.ADMIN;
+
+        if (!isOwner && !isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to edit this record");
+        }
+
+        validateMemoLength(clockInMemo);
+        validateMemoLength(clockOutMemo);
+
+        if (clockInMemo != null) {
+            record.setClockInMemo(clockInMemo);
+        }
+        if (clockOutMemo != null) {
+            record.setClockOutMemo(clockOutMemo);
+        }
+
+        var saved = attendanceRepository.save(record);
+        return AttendanceRecordResponse.from(saved);
+    }
+
+    private void validateMemoLength(String memo) {
+        if (memo != null && memo.length() > MAX_MEMO_LENGTH) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Memo must be %d characters or less".formatted(MAX_MEMO_LENGTH));
+        }
     }
 
     @Override
