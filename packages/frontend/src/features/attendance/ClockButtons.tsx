@@ -1,40 +1,36 @@
 "use client";
 
 import { LogIn, LogOut } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CurrentTime } from "./CurrentTime";
 import { formatTime } from "./format";
 import { useClockIn, useClockOut, useTodayStatus } from "./useAttendance";
 
-function CurrentTime() {
-  const [now, setNow] = useState(() => new Date());
+const BUTTON_COLORS = {
+  blue: "bg-blue-500 hover:bg-blue-600 active:bg-blue-700",
+  orange: "bg-orange-500 hover:bg-orange-600 active:bg-orange-700",
+} as const;
 
-  useEffect(() => {
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+interface ClockButtonProps {
+  disabled: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+  color: keyof typeof BUTTON_COLORS;
+}
 
-  const timeStr = now.toLocaleTimeString("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false,
-  });
-
-  const dateStr = now.toLocaleDateString("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  });
-
+function ClockButton({ disabled, onClick, icon, label, color }: ClockButtonProps) {
   return (
-    <div className="text-center">
-      <p className="text-4xl font-bold tabular-nums tracking-tight">{timeStr}</p>
-      <p className="text-sm text-muted-foreground mt-1">{dateStr}</p>
-    </div>
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className={`flex flex-col items-center justify-center gap-2 rounded-xl py-8 text-white transition-colors disabled:bg-gray-200 disabled:text-gray-400 ${BUTTON_COLORS[color]}`}
+    >
+      {icon}
+      <span className="text-lg font-bold">{label}</span>
+    </button>
   );
 }
 
@@ -48,6 +44,7 @@ export function ClockButtons() {
   const { data: todayStatus, isLoading } = useTodayStatus();
   const clockInMutation = useClockIn();
   const clockOutMutation = useClockOut();
+  const memoRef = useRef<HTMLInputElement>(null);
 
   if (isLoading) {
     return (
@@ -67,6 +64,8 @@ export function ClockButtons() {
   const canClockOut = status === "CLOCKED_IN";
   const isPending = clockInMutation.isPending || clockOutMutation.isPending;
 
+  const getMemo = () => memoRef.current?.value || undefined;
+
   const lastRecord = todayStatus?.records[todayStatus.records.length - 1];
 
   return (
@@ -80,25 +79,30 @@ export function ClockButtons() {
           </span>
         )}
       </div>
+      <div className="max-w-md mx-auto">
+        <input
+          ref={memoRef}
+          type="text"
+          placeholder="メモ（任意・100文字以内）"
+          maxLength={100}
+          className="w-full rounded-lg border px-3 py-2 text-sm"
+        />
+      </div>
       <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-        <button
-          type="button"
+        <ClockButton
           disabled={!canClockIn || isPending}
-          onClick={() => clockInMutation.mutate()}
-          className="flex flex-col items-center justify-center gap-2 rounded-xl bg-blue-500 py-8 text-white transition-colors hover:bg-blue-600 active:bg-blue-700 disabled:bg-gray-200 disabled:text-gray-400"
-        >
-          <LogIn className="h-8 w-8" />
-          <span className="text-lg font-bold">出勤</span>
-        </button>
-        <button
-          type="button"
+          onClick={() => clockInMutation.mutate(getMemo())}
+          icon={<LogIn className="h-8 w-8" />}
+          label="出勤"
+          color="blue"
+        />
+        <ClockButton
           disabled={!canClockOut || isPending}
-          onClick={() => clockOutMutation.mutate()}
-          className="flex flex-col items-center justify-center gap-2 rounded-xl bg-orange-500 py-8 text-white transition-colors hover:bg-orange-600 active:bg-orange-700 disabled:bg-gray-200 disabled:text-gray-400"
-        >
-          <LogOut className="h-8 w-8" />
-          <span className="text-lg font-bold">退勤</span>
-        </button>
+          onClick={() => clockOutMutation.mutate(getMemo())}
+          icon={<LogOut className="h-8 w-8" />}
+          label="退勤"
+          color="orange"
+        />
       </div>
     </div>
   );

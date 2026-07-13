@@ -12,7 +12,13 @@ public interface AttendanceService {
 
     AttendanceRecordResponse clockIn(UUID employeeId);
 
+    AttendanceRecordResponse clockIn(UUID employeeId, String memo);
+
     AttendanceRecordResponse clockOut(UUID employeeId);
+
+    AttendanceRecordResponse clockOut(UUID employeeId, String memo);
+
+    AttendanceRecordResponse updateMemo(UUID recordId, UUID requesterId, String clockInMemo, String clockOutMemo);
 
     TodayStatusResponse getTodayStatus(UUID employeeId);
 
