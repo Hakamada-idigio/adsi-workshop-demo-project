@@ -27,10 +27,10 @@ class CsvExportServiceTest {
         var records = List.of(
                 new EmployeeMonthlyRecord(
                         UUID.randomUUID(), "田中太郎", "Engineering",
-                        20, 9600, 480, 3),
+                        20, 9600, 480, 3, null),
                 new EmployeeMonthlyRecord(
                         UUID.randomUUID(), "鈴木花子", "Sales",
-                        22, 10560, 0, 1)
+                        22, 10560, 0, 1, null)
         );
 
         // Act
@@ -50,7 +50,7 @@ class CsvExportServiceTest {
         var records = List.of(
                 new EmployeeMonthlyRecord(
                         UUID.randomUUID(), "田中太郎", "Engineering",
-                        20, 9600, 480, 3)
+                        20, 9600, 480, 3, null)
         );
 
         // Act

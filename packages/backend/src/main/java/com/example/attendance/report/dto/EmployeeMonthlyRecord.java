@@ -9,5 +9,6 @@ public record EmployeeMonthlyRecord(
     int workDays,
     int totalWorkMinutes,
     int totalOvertimeMinutes,
-    int absentDays
+    int absentDays,
+    String remarks
 ) {}

@@ -12,6 +12,7 @@
     <field name="totalWorkMinutes" class="java.lang.Integer"/>
     <field name="totalOvertimeMinutes" class="java.lang.Integer"/>
     <field name="absentDays" class="java.lang.Integer"/>
+    <field name="remarks" class="java.lang.String"/>
 
     <title height="50">
         <element kind="textField" x="0" y="0" width="802" height="40"
@@ -22,75 +23,86 @@
     </title>
 
     <columnHeader height="30">
-        <element kind="staticText" x="0" y="0" width="134" height="30"
+        <element kind="staticText" x="0" y="0" width="110" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[社員名]]></text>
         </element>
-        <element kind="staticText" x="134" y="0" width="134" height="30"
+        <element kind="staticText" x="110" y="0" width="100" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[部署]]></text>
         </element>
-        <element kind="staticText" x="268" y="0" width="134" height="30"
+        <element kind="staticText" x="210" y="0" width="80" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[出勤日数]]></text>
         </element>
-        <element kind="staticText" x="402" y="0" width="134" height="30"
+        <element kind="staticText" x="290" y="0" width="100" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[勤務時間（分）]]></text>
         </element>
-        <element kind="staticText" x="536" y="0" width="134" height="30"
+        <element kind="staticText" x="390" y="0" width="100" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[残業時間（分）]]></text>
         </element>
-        <element kind="staticText" x="670" y="0" width="132" height="30"
+        <element kind="staticText" x="490" y="0" width="80" height="30"
                  mode="Opaque" backcolor="#DDDDDD"
                  fontName="Noto Sans JP" fontSize="10.0" bold="true"
                  hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[欠勤日数]]></text>
         </element>
+        <element kind="staticText" x="570" y="0" width="232" height="30"
+                 mode="Opaque" backcolor="#DDDDDD"
+                 fontName="Noto Sans JP" fontSize="10.0" bold="true"
+                 hTextAlign="Center" vTextAlign="Middle">
+            <text><![CDATA[備考]]></text>
+        </element>
     </columnHeader>
 
     <detail>
         <band height="25">
-            <element kind="textField" x="0" y="0" width="134" height="25"
+            <element kind="textField" x="0" y="0" width="110" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{employeeName}]]></expression>
             </element>
-            <element kind="textField" x="134" y="0" width="134" height="25"
+            <element kind="textField" x="110" y="0" width="100" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{departmentName}]]></expression>
             </element>
-            <element kind="textField" x="268" y="0" width="134" height="25"
+            <element kind="textField" x="210" y="0" width="80" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{workDays}]]></expression>
             </element>
-            <element kind="textField" x="402" y="0" width="134" height="25"
+            <element kind="textField" x="290" y="0" width="100" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{totalWorkMinutes}]]></expression>
             </element>
-            <element kind="textField" x="536" y="0" width="134" height="25"
+            <element kind="textField" x="390" y="0" width="100" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{totalOvertimeMinutes}]]></expression>
             </element>
-            <element kind="textField" x="670" y="0" width="132" height="25"
+            <element kind="textField" x="490" y="0" width="80" height="25"
                      fontName="Noto Sans JP"
                      hTextAlign="Center" vTextAlign="Middle">
                 <expression><![CDATA[$F{absentDays}]]></expression>
+            </element>
+            <element kind="textField" x="570" y="0" width="232" height="25"
+                     fontName="Noto Sans JP"
+                     hTextAlign="Left" vTextAlign="Middle">
+                <expression><![CDATA[$F{remarks}]]></expression>
             </element>
         </band>
     </detail>

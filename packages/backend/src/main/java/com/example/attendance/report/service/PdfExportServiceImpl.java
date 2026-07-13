@@ -55,6 +55,7 @@ public class PdfExportServiceImpl implements PdfExportService {
         map.put("totalWorkMinutes", record.totalWorkMinutes());
         map.put("totalOvertimeMinutes", record.totalOvertimeMinutes());
         map.put("absentDays", record.absentDays());
+        map.put("remarks", record.remarks() != null ? record.remarks() : "");
         return map;
     }
 }

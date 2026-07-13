@@ -69,6 +69,12 @@ public class ReportServiceImpl implements ReportService {
                     }
                     int absentDays = Math.max(0, weekdaysInMonth - workDays);
 
+                    var remarks = empRecords.stream()
+                            .flatMap(r -> java.util.stream.Stream.of(r.getClockInMemo(), r.getClockOutMemo()))
+                            .filter(java.util.Objects::nonNull)
+                            .distinct()
+                            .collect(Collectors.joining(", "));
+
                     return new EmployeeMonthlyRecord(
                             emp.getId(),
                             emp.getName(),
@@ -76,7 +82,8 @@ public class ReportServiceImpl implements ReportService {
                             workDays,
                             totalWorkMinutes,
                             totalOvertimeMinutes,
-                            absentDays
+                            absentDays,
+                            remarks.isEmpty() ? null : remarks
                     );
                 })
                 .toList();

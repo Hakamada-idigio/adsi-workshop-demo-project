@@ -19,6 +19,22 @@ function hasCorrected(day: DailyAttendanceResponse): boolean {
   return day.records.some((r) => r.corrected);
 }
 
+function Memos({ day }: { day: DailyAttendanceResponse }) {
+  const parts: string[] = [];
+  for (const r of day.records) {
+    if (r.clockInMemo) parts.push(r.clockInMemo);
+    if (r.clockOutMemo) parts.push(r.clockOutMemo);
+  }
+  if (parts.length === 0) return null;
+  return (
+    <span className="flex flex-wrap gap-1">
+      {parts.map((m, i) => (
+        <span key={i}>{m}</span>
+      ))}
+    </span>
+  );
+}
+
 const columns: Column<DailyAttendanceResponse>[] = [
   {
     key: "date",
@@ -49,6 +65,11 @@ const columns: Column<DailyAttendanceResponse>[] = [
     key: "overtimeMinutes",
     header: "残業",
     render: (day) => (day.overtimeMinutes > 0 ? formatMinutes(day.overtimeMinutes) : "-"),
+  },
+  {
+    key: "memo",
+    header: "備考",
+    render: (day) => <Memos day={day} />,
   },
   {
     key: "corrected",
