@@ -6,6 +6,8 @@ export interface AttendanceRecordResponse {
   clockIn: string;
   clockOut: string | null;
   corrected: boolean;
+  clockInMemo: string | null;
+  clockOutMemo: string | null;
 }
 
 export interface TodayStatusResponse {
@@ -45,19 +47,17 @@ export interface TeamMemberSummaryResponse {
 }
 
 export function clockIn(employeeId: string, memo?: string): Promise<AttendanceRecordResponse> {
-  const params = new URLSearchParams({ employeeId });
-  if (memo) params.set("memo", memo);
-  return apiClient.post<AttendanceRecordResponse>(
-    `/api/attendance/clock-in?${params.toString()}`,
-  );
+  return apiClient.post<AttendanceRecordResponse>("/api/attendance/clock-in", {
+    employeeId,
+    memo: memo || null,
+  });
 }
 
 export function clockOut(employeeId: string, memo?: string): Promise<AttendanceRecordResponse> {
-  const params = new URLSearchParams({ employeeId });
-  if (memo) params.set("memo", memo);
-  return apiClient.post<AttendanceRecordResponse>(
-    `/api/attendance/clock-out?${params.toString()}`,
-  );
+  return apiClient.post<AttendanceRecordResponse>("/api/attendance/clock-out", {
+    employeeId,
+    memo: memo || null,
+  });
 }
 
 export function fetchTodayStatus(employeeId: string): Promise<TodayStatusResponse> {

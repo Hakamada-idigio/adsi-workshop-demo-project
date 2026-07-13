@@ -209,6 +209,7 @@ class AttendanceServiceMemoTest {
                     .clockIn(Instant.parse("2025-01-14T23:00:00Z"))
                     .build();
             when(attendanceRepository.findById(recordId)).thenReturn(Optional.of(record));
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
             when(attendanceRepository.save(any(AttendanceRecord.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -232,6 +233,7 @@ class AttendanceServiceMemoTest {
                     .clockOut(Instant.parse("2025-01-15T08:00:00Z"))
                     .build();
             when(attendanceRepository.findById(recordId)).thenReturn(Optional.of(record));
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
             when(attendanceRepository.save(any(AttendanceRecord.class)))
                     .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -264,6 +266,7 @@ class AttendanceServiceMemoTest {
                     .clockIn(Instant.parse("2025-01-14T23:00:00Z"))
                     .build();
             when(attendanceRepository.findById(recordId)).thenReturn(Optional.of(record));
+            when(employeeRepository.findById(employee.getId())).thenReturn(Optional.of(employee));
 
             // Act & Assert
             assertThatThrownBy(() -> service.updateMemo(recordId, employee.getId(), "test", null))

@@ -84,6 +84,7 @@ export function ClockButtons() {
           ref={memoRef}
           type="text"
           placeholder="メモ（任意・100文字以内）"
+          aria-label="打刻メモ"
           maxLength={100}
           className="w-full rounded-lg border px-3 py-2 text-sm"
         />

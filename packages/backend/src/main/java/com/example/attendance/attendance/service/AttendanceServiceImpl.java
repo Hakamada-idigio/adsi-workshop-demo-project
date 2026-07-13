@@ -110,7 +110,11 @@ public class AttendanceServiceImpl implements AttendanceService {
         var record = attendanceRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException("Record not found"));
 
-        if (!record.getEmployee().getId().equals(requesterId)) {
+        var requester = findEmployeeOrThrow(requesterId);
+        var isOwner = record.getEmployee().getId().equals(requesterId);
+        var isAdmin = requester.isManager() || requester.getRole() == com.example.attendance.employee.entity.Role.ADMIN;
+
+        if (!isOwner && !isAdmin) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed to edit this record");
         }
 
